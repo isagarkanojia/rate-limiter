@@ -6,6 +6,7 @@ import io.github.bucket4j.Bucket4j;
 import io.github.bucket4j.Refill;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,13 +18,13 @@ class TestController {
     private final Bucket bucket;
 
     public TestController() {
-        Bandwidth limit = Bandwidth.classic(20, Refill.greedy(20, Duration.ofMinutes(1)));
+        Bandwidth limit = Bandwidth.classic(1, Refill.greedy(20, Duration.ofMinutes(1)));
         this.bucket = Bucket4j.builder()
                 .addLimit(limit)
                 .build();
     }
 
-    @PostMapping(value = "/api/v1/test")
+    @GetMapping(value = "/api/v1/test")
     public ResponseEntity<String> test() {
 
         if (bucket.tryConsume(1)) {
